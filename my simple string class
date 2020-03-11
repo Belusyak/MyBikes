@@ -1,0 +1,119 @@
+#include <iostream>
+using namespace std;
+/*
+операторы ==,!=,=,+
+вывод на экран
+замена символа
+вывод опр символа
+*/
+
+class Mystring
+{
+private:
+	char* str;
+	int len;
+
+public:
+	Mystring()
+	{
+		//cout << "вызвался конструктор без параметров" << this << endl;
+		str = nullptr;
+	}
+
+	Mystring(const Mystring & other)
+	{
+		//cout << "вызвался конструктор копирования" << this << endl;
+		this->len = strlen(other.str);
+		this->str = new char[len + 1];
+
+		for (int i = 0; i < len; i++)
+		{
+			str[i] = other.str[i];
+		}
+
+		str[len] = '\0';
+
+	}
+	Mystring(const char* other)
+	{
+		//cout << "вызвался конструктор с параметром"<< this << endl;
+		this->len = strlen(other);
+		this->str=new char[len + 1];
+
+		for (int i = 0; i < len; i++)
+		{
+			this->str[i] = other[i];
+		}
+
+		this->str[len] = '\0';
+
+	}
+	~Mystring()
+	{
+		//cout << "вызвался деструктор" << this << endl;
+		delete[]this->str;
+	}
+
+	void show()  
+	{
+		cout << this->str << endl;
+	}
+
+	Mystring operator+ (const Mystring& other)
+	{
+		int len1 = strlen(this->str);
+		int len2 = strlen(other.str);
+		Mystring value;
+		value.str = new char[len1 + len2 + 1];
+
+		for (int i = 0; i < len1; i++)
+		{
+			value.str[i] = this->str[i];			
+		}
+
+		for (int i = len1; i < len1+len2; i++)
+		{
+			value.str[i] = other.str[i-len1];
+		}
+		value.str[len1 + len2] = '\0';
+		return value;
+	}
+  
+	Mystring& operator= (const Mystring& other)
+	{
+
+		if (this->str != nullptr)
+		{
+			delete[]str;
+		}
+		
+		this-> len = other.len;
+		this->str = new char[len];
+		for (int i = 0; i < len; i++)
+		{
+			this->str[i] = other.str[i];
+		}
+		 
+		this->str[len] = '\0';
+		return *this;
+	}
+
+
+ };
+
+int main()
+{
+	setlocale(LC_ALL, "ru");
+	Mystring s("Hello");
+	Mystring s2("World");
+	Mystring s3;
+
+	s3 = s + s2;
+	s3.show();
+
+ 	s2 = s2 + s;
+	s2.show();
+
+
+
+}
